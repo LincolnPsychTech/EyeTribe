@@ -10,18 +10,19 @@ function fig = EyeTribePlot(data, stimdir, stimpos)
     ax.TickLength = [0 0];
     ax.XLim = [0, screendim(1)];
     ax.YLim = [0, screendim(2)];
-    set(ax, 'FontName', 'Verdana'); % Change font
-    set(ax,'Color',[0.97, 0.97, 0.99]) % Grey background
-    set(ax, 'YGrid', 'on'); % Add horizontal gridlines
-    set(ax, 'YMinorGrid', 'on'); % Add horizontal gridlines
-    set(ax, 'XGrid', 'on'); % Add vertical gridlines
-    set(ax, 'XMinorGrid', 'on'); % Add vertical gridlines
-    set(ax, 'GridColor', 'white'); % Make gridlines white
-    set(ax, 'GridAlpha', 1); % Make gridlines opaque
-    set(ax, 'MinorGridColor', 'white'); % Make gridlines white
-    set(ax, 'MinorGridAlpha', 1); % Make gridlines opaque
-    set(ax, 'MinorGridLineStyle', '-'); % Make gridlines opaque
-    set(ax, 'Box', 'off');
+    set(ax, ...
+        'FontName', 'Verdana', ... % Nicer font
+        'Color', [0.97, 0.97, 0.99], ... % Grey background
+        'Box', 'off' ...
+        ); % Format axis
+    set(ax, ... % Add gridlines
+        {'YGrid' 'YMinorGrid' 'XGrid' 'XMinorGrid'}, ...
+        {'on' 'on' 'on' 'on'} ...
+        ); 
+    set(ax, ... % Format gridlines
+        {'GridAlpha' 'MinorGridAlpha' 'MinorGridLineStyle' 'GridColor' 'MinorGridColor'}, ...
+        {1           1                '-'                  'white'     'white'}...
+        );
     hold on
     
     im = image(ax, ...
