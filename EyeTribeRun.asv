@@ -3,9 +3,10 @@ data = struct();
 
 et = tcpip('localhost', port);
 fopen(et);
-
-fprintf(et,'{"category": "tracker", "request": "get", "values": ["screenresw"]}');
+fprintf(et,'{"category": "tracker", "request": "get", "values": ["screenresw", "screenresh"]}');
+dim = fscanf(et);
 w_raw = erase(fscanf(et), {'"' '{' '}' ':'});
+
 w_cell = strsplit(w_raw, 'valuesscreenresw');
 fprintf(et,'{"category": "tracker", "request": "get", "values": ["screenresh"]}');
 h_raw = erase(fscanf(et), {'"' '{' '}' ':'});
@@ -31,8 +32,6 @@ for frame = 1:dur*sps
         end
     end
 end
-
-data.screen = screendim;
 
     function output = etgetval(et)
         fprintf(et,'{"category": "tracker", "request": "get", "values": ["frame"]}');
@@ -87,15 +86,13 @@ data.screen = screendim;
                     dat{h} = erase(dat{h}, ':');
                 end
                 if istable(dat{h})
-                    t = varfun(@str2num,dat{h});
-                    t.Properties.VariableNames = dat{h}.Properties.VariableNames;
-                    dat{h} = t;
-                else
-                    [num, isnum] = str2num(dat{h});
-                    if isnum
-                        dat{h} = num;
-                    end
+                    dat{h}.x = str2num(dat{h}.x);
                 end
+                [num, isnum] = str2num(dat{h});
+                if isnum
+                    dat{h} = num;
+                end
+                    
                 section.(head{h}) = dat{h}; %store in structure
             end
             section = struct2table(section);
