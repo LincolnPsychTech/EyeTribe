@@ -6,15 +6,6 @@ ax.XLim = [0, w.Position(3)];
 ax.YLim = [0, w.Position(4)];
 set(ax, 'FontName', 'Verdana'); % Change font
 set(ax,'Color',[0.97, 0.97, 0.99]) % Grey background
-set(ax, 'YGrid', 'on'); % Add horizontal gridlines
-set(ax, 'YMinorGrid', 'on'); % Add horizontal gridlines
-set(ax, 'XGrid', 'on'); % Add vertical gridlines
-set(ax, 'XMinorGrid', 'on'); % Add vertical gridlines
-set(ax, 'GridColor', 'white'); % Make gridlines white
-set(ax, 'GridAlpha', 1); % Make gridlines opaque
-set(ax, 'MinorGridColor', 'white'); % Make gridlines white
-set(ax, 'MinorGridAlpha', 1); % Make gridlines opaque
-set(ax, 'MinorGridLineStyle', '-'); % Make gridlines opaque
 set(ax, 'Box', 'off');
 hold on
 
