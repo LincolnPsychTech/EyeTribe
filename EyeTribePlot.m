@@ -1,7 +1,10 @@
 function fig = EyeTribePlot(data, stimdir, stimpos)
-    x = data.values.avg.x;
-    y = data.values.avg.y;
+    i = ~any([isoutlier(data.values.avg.x) isoutlier(data.values.avg.y)],2);
+    x = data.values.avg.x(i);
+    y = data.values.avg.y(i);
     screendim = data.screen;
+    
+    
     
     fig = figure;
     fig.InnerPosition = [0, 0, screendim];
@@ -25,10 +28,13 @@ function fig = EyeTribePlot(data, stimdir, stimpos)
         );
     hold on
     
+    [img, map, alpha] = imread(stimdir);
+    
     im = image(ax, ...
         'XData', [stimpos(1), stimpos(1)+stimpos(3)], ...
         'YData', [stimpos(2), stimpos(2)+stimpos(4)], ...
-        'CData', flipud(imread(stimdir)));
+        'CData', flipud(img), ...
+        'AlphaData', flipud(alpha));
     
     trace = line(ax, x, screendim(2)-y);
     trace.Color = 'red';

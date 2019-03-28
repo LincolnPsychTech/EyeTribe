@@ -9,13 +9,16 @@ set(ax,'Color',[0.97, 0.97, 0.99]) % Grey background
 set(ax, 'Box', 'off');
 hold on
 
+[img, map, alpha] = imread('chartest.png');
+
 im = image(ax, ...
-    'XData', [200, 200+561], ...
-    'YData', [200, 200+632], ...
-    'CData', flipud(imread('AH00.PNG')));
+    'XData', [200, 200+900], ...
+    'YData', [200, 200+400], ...
+    'CData', flipud(img), ...
+    'AlphaData', flipud(alpha));
 drawnow
 
 data = EyeTribeRun(6555, 10, 5);
 close all
 
-EyeTribePlot(data, 'AH00.PNG', [200,200,561,632])
+EyeTribePlot(data, 'chartest.png', [200,200,900,400])
