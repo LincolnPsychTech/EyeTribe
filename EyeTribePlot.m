@@ -3,32 +3,37 @@ function fig = EyeTribePlot(data, stimdir, stimpos)
     x = data.values.avg.x(i);
     y = data.values.avg.y(i);
     screendim = data.screen;
-    
-    
-    
+
     fig = figure;
-    fig.InnerPosition = [0, 0, screendim];
-    
-    ax = axes(fig, 'Position', [0, 0, 1, 1]);
-    ax.TickLength = [0 0];
-    ax.XLim = [0, screendim(1)];
-    ax.YLim = [0, screendim(2)];
-    set(ax, ...
-        'FontName', 'Verdana', ... % Nicer font
-        'Color', [0.97, 0.97, 0.99], ... % Grey background
-        'Box', 'off' ...
-        ); % Format axis
-    set(ax, ... % Add gridlines
-        {'YGrid' 'YMinorGrid' 'XGrid' 'XMinorGrid'}, ...
-        {'on' 'on' 'on' 'on'} ...
-        ); 
-    set(ax, ... % Format gridlines
-        {'GridAlpha' 'MinorGridAlpha' 'MinorGridLineStyle' 'GridColor' 'MinorGridColor'}, ...
-        {1           1                '-'                  'white'     'white'}...
+    set(fig, ...
+        'InnerPosition', [0, 0, screendim]...
         );
-    hold on
     
-    [img, map, alpha] = imread(stimdir);
+    ax = axes(fig);
+    set(ax, ... % Format axis
+        'Position', [0, 0, 1, 1], ... % Fill window
+        'NextPlot', 'add', ... % Keep plots when drawing new ones
+        'XLim', [0, screendim(1)], ... % X limits to window width (pixels)
+        'YLim', [0, screendim(2)], ... % X limits to window width (pixels)
+        'Color', [0.97, 0.97, 0.99], ... % Grey background
+        'Box', 'off', ... % No outline
+        'TickLength', [0 0], ... % No tickmarks
+        'FontName', 'Verdana', ... % Nicer font
+        ... % Add major gridlines
+        'GridColor', 'white', ... % White lines
+        'GridAlpha', 1, ... % Full opacity
+        'GridLineStyle', '-', ... % Solid lines
+        'XGrid', 'on', ... % Vertical lines
+        'YGrid', 'on', ... % Horizontal lines
+        ... % Add minor gridlines
+        'MinorGridColor', 'white', ... % White lines
+        'MinorGridAlpha', 1, ... % Full opacity
+        'MinorGridLineStyle', '-', ... % Solid lines
+        'XMinorGrid', 'on', ... % Vertical lines
+        'YMinorGrid', 'on' ... % Horizontal lines
+        ); 
+
+    [img, ~, alpha] = imread(stimdir);
     
     im = image(ax, ...
         'XData', [stimpos(1), stimpos(1)+stimpos(3)], ...
@@ -37,13 +42,14 @@ function fig = EyeTribePlot(data, stimdir, stimpos)
         'AlphaData', flipud(alpha));
     
     trace = line(ax, x, screendim(2)-y);
-    trace.Color = 'red';
-    trace.LineWidth = 2;
-    trace.Marker = 'o';
-    trace.MarkerSize = 8;
-    trace.MarkerFaceColor = 'white';
-    
-    
+    set(trace, ...
+        'Color', 'red', ...
+        'LineWidth', 2, ...
+        'Marker', 'o', ...
+        'MarkerSize', 8, ...
+        'MarkerFaceColor', 'white' ...
+        );
+
     %% Resize to fit screen
     sd = get(groot, 'ScreenSize');
     if any(fig.OuterPosition([3,4]) > sd([3,4]) - 100)
