@@ -1,4 +1,4 @@
-function fig = EyeTribePlot(data, stimdir, stimpos)
+function fig = etplot(data, stimdir, stimpos)
     i = ~any([isoutlier(data.values.avg.x) isoutlier(data.values.avg.y)],2);
     x = data.values.avg.x(i);
     y = data.values.avg.y(i);

@@ -1,4 +1,4 @@
-function data = EyeTribeRun(port, dur, sps)
+function data = etrun(port, dur, sps)
 data = struct();
 
 et = tcpip('localhost', port);

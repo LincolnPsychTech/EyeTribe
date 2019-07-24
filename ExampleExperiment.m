@@ -11,6 +11,8 @@ hold on
 
 [img, map, alpha] = imread('chartest.png');
 
+
+
 im = image(ax, ...
     'XData', [200, 200+900], ...
     'YData', [200, 200+400], ...
@@ -20,5 +22,3 @@ drawnow
 
 data = EyeTribeRun(6555, 10, 5);
 close all
-
-EyeTribePlot(data, 'chartest.png', [200,200,900,400])
