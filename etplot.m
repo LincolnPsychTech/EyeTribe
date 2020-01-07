@@ -1,4 +1,4 @@
-function fig = etplot(data, stim, screen)
+function fig = etplot(data, screen, varargin)
 plotData = [data.avg]; % Get averaged data
 x = [plotData.x]; % Get x data
 y = [plotData.y]; % Get y data
@@ -41,13 +41,10 @@ set(ax, ... % Format axis
     );
 
 %% Draw stimulus
-[img, ~, alpha] = imread(stim.Dir);
-
-im = image(ax, ...
-    'XData', [stim.Pos(1), stim.Pos(1)+stim.Pos(3)], ...
-    'YData', [stim.Pos(2), stim.Pos(2)+stim.Pos(4)], ...
-    'CData', flipud(img), ...
-    'AlphaData', flipud(alpha));
+for stim = varargin
+    stim = stim{:};
+    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4))
+end
 
 %% Plot eye movement
 trace = line(ax, x(i), screen.Height-y(i), ...
