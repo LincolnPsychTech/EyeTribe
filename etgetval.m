@@ -1,4 +1,8 @@
 function val = etgetval(sock)
+% Get a single value from the EyeTribe
+% val = Parsed JSON object received from EyeTribe
+% sock = TCPIP socket connected to EyeTribe, created from @etconnect
+
 try
     fprintf(sock,'{"category": "tracker", "request": "get", "values": ["frame"]}'); % Send request to socket
     raw = fscanf(sock); % Get data back from socket

@@ -1,6 +1,12 @@
 function [sock, screen] = etconnect(port)
+% Connect Matlab to an active EyeTribe via the EyeTribe Server (which will
+% need to be running)
+% sock = TCPIP socket linked to EyeTribe
+% screen = Structure with screen details
+% port = Port of EyeTribe server ("TCP port" on the EyeTribe server window)
 
-% Establish socket
+
+%% Establish socket
 sock = tcpip('localhost', port); % Create tcpip object
 sock.timeout = 1; % Set it to time out if no response after 1s
 fopen(sock); % Open connection

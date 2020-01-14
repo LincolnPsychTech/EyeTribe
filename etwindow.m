@@ -1,6 +1,17 @@
-function [fig, ax] = etwindow(col)
+function [ax, fig] = etwindow(sDim, col)
+% Function to create a fullscreen window for plotting stimuli to.
+% ax = Axis to plot to
+% fig = Figure object containing window
+% col = Background colour [r, g, b]
+% X and Y limits of ax will be set to the dimensions of the screen,
+% background colour will default to [0.5, 0.5, 0.5] if none is specified
 
-sDim = get(groot, 'ScreenSize'); % Get screen dimensions
+if ~exist('sDim', 'var') % If user did not specify screen dim...
+    sDim = get(groot, 'ScreenSize'); % Get screen dimensions
+end
+if ~exist('col', 'var') % If user did not specify colour...
+    col = [0.5 0.5 0.5]; % Default to 0.5 grey
+end
 
 fig = figure('InnerPosition', sDim); % Create full screen figure
 

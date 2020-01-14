@@ -1,7 +1,12 @@
 function stim = etstim(ax, stimdir, x, y, w, h)
-
-%% Defaults for non-values
-
+% Function to draw a stimulus to an axis, recommended to draw it to an axis
+% created via @etwindow, but can work with any axis.
+% stim = Image / Textbox object created
+% ax = Axis to draw to
+% x = x co-ordinate of bottom left corner
+% y = y co-ordinate of bottom left corner
+% w = stimulus width
+% h = stimulus height
 
 %% Create storage structure
 stim = struct(...
@@ -12,12 +17,18 @@ stim = struct(...
     );
 
 %% Determine stim type
-stimdirSplt = strsplit(stimdir, '.');
-stimExt = stimdirSplt{end};
-imgExts = imformats;
+imgExts = imformats; % Get all valid image file types
+txtExts = {'txt'}; % Specify valid text file types
+
+stimdirSplt = strsplit(stimdir, '.'); % Split stim dir at every full stop
+stimExt = stimdirSplt{end}; % Take only the last cell
+
+
+%% Split by stim type
 switch stimExt
-    %% If stimulus is an image
     case [imgExts.ext] % If stimulus is an image...
+        stim.Type = 'img';
+        
         %% Read image
         [img, ~, alpha] = imread(stimdir); % Read image
         if isempty(alpha) % If no transparency data...
@@ -45,7 +56,7 @@ switch stimExt
             'CData', flipud(img), ... % Flip upside down as y axes are backwards
             'AlphaData', flipud(alpha) ... % Apply transparency
             );
-    case 'txt'
+    case txtExts
         %% Read text
         txt = fileread(stimdir);
         
@@ -64,11 +75,11 @@ switch stimExt
         end
         
         %% Draw text
-        stim.Obj = annotation('textbox', ...
-            'EdgeColor', 'none', ...
-            'FontSize', 20, ...
-            'Position', [stim.Pos(1) stim.Pos(2) stim.Pos(3) stim.Pos(4)], ...
-            'String', txt);
+        stim.Obj = annotation('textbox', ... % Create a textbox...
+            'EdgeColor', 'none', ... % ...with no edge...
+            'FontSize', 20, ... % ...font size 20...
+            'Position', [stim.Pos(1) stim.Pos(2) stim.Pos(3) stim.Pos(4)], ... % ...at a user-specified position...
+            'String', txt); % ...containing the string specified by the user
 end
 
 

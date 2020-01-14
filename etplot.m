@@ -1,4 +1,11 @@
 function fig = etplot(data, screen, varargin)
+% Plot the results of an EyeTribe experiment.
+% fig = Figure object of output plot
+% data = Data structure from an EyeTribe experiment
+% screen = Screen details structure, from @etconnect
+% varargin = Stimuli to plot, each input being a stim structure from @etstim
+
+%% Transform data
 plotData = [data.avg]; % Get averaged data
 x = [plotData.x]; % Get x data
 y = [plotData.y]; % Get y data
@@ -41,17 +48,17 @@ set(ax, ... % Format axis
     );
 
 %% Draw stimulus
-for stim = varargin
-    stim = stim{:};
-    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4))
+for stim = varargin % For each stimulus...
+    stim = stim{:}; % Remove extraneous layer
+    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4)) % Draw stimulus
 end
 
 %% Plot eye movement
-trace = line(ax, x(i), screen.Height-y(i), ...
+trace = line(ax, x(i), screen.Height-y(i), ... % Create a line to show path of eye movement
     'Color', 'red', ...
     'LineWidth', 2 ...
     );
-fix = scatter(ax, x(i & [data.fix]), screen.Height-y(i & [data.fix]), ...
+fix = scatter(ax, x(i & [data.fix]), screen.Height-y(i & [data.fix]), ... % Create scatter points at each fixation
     'Marker', 'o', ...
     'LineWidth', 2, ...
     'SizeData', 72, ...
