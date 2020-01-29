@@ -1,5 +1,5 @@
 [sock, screen] = etconnect(6555);
-[fig, ax] = etwindow([0.8 0.8 0.8]);
+[ax, fig] = etwindow([], [0.8 0.8 0.8]);
 stim = etstim(ax, 'test.png', [], [], [], []);
 txt = etstim(ax, 'test.txt', [], [], [], []);
 drawnow

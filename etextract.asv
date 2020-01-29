@@ -1,0 +1,16 @@
+function output = etextract(data, varargin)
+%Extract just a particular field from an etrun output
+
+output = table();
+
+for field = varargin
+    fsplt = strsplit(field{:}, '.');
+    lvl = data;
+    for f2 = fsplt
+        lvl = [lvl.(f2{:})];
+    end
+    output = [output, table(lvl', 'VariableNames', join(fsplt, '_'))];
+    
+    path = uigetdir()
+    fname  
+end
