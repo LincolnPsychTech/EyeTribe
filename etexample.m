@@ -10,8 +10,8 @@ txt = etstim(screen, 'example_text.txt', [NaN, 200]); % Load a text stimulus
 %% Define regions of interest
 stim.ROI = etroi('Image', stim); % Define ROI for image (supplied stim structure rather than coords)
 txt.ROI = etroi('Text', ... % Define ROI for text stimulus...
-    txt.Pos(1) + [0 0 500 500], ... % ...text corner x coords (formatted to define a polygon)
-    txt.Pos(2) + [0 500 500 0] ... % ...text corner y coords (formatted to define a polygon)
+    txt.Pos(1) + [-300 -300 300 300], ... % ...text corner x coords (formatted to define a polygon)
+    txt.Pos(2) + [-50  50   50  -50] ... % ...text corner y coords (formatted to define a polygon)
     );
 
 %% Initialise window
@@ -30,7 +30,10 @@ close(fig); % Close window
 etdisconnect(sock); % Disconnect EyeTribe
 
 %% Plot results
-[fig2, ax2] = etplot(data, screen, stim, txt); % Plot trace on top of stimuli and ROI's
+[fig2, ax2] = etplot(data, screen, ... % Plot trace...
+    stim, txt, ... % ...stimuli...
+    stim.ROI, txt.ROI ... % ...and regions of interest
+    );
 
 %% Save data
 dataFlat = etcsv(data, 'example_data.csv'); % Flatten data and save as a csv

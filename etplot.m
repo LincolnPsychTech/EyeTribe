@@ -6,9 +6,6 @@ function [fig, ax] = etplot(data, screen, varargin)
 % varargin = Stimuli to plot, each input being a stim structure from @etstim
 
 
-% NTS: Add roi plotting functionality (varargin with stimuli)
-
-
 %% Transform data
 plotData = [data.avg]; % Get averaged data
 x = [plotData.x]; % Get x data
@@ -17,6 +14,18 @@ i = ... % Generate exclusion matrix
     ~( isoutlier(x) | isoutlier(y) ) & ... % Exclude values which are outliers
     ~( x < 10 | y < 10 | x > screen.Width - 10 | y > screen.Height - 10 ) ... % Exclude values which are off the screen
     ;
+
+%% Sort stimuli and roi
+stim_array = [];
+roi_array = [];
+for inp = varargin
+    if all( isfield(inp{:}, {'Type', 'Pos', 'Dir', 'Obj'}) ) % If input is a stimulus...
+        stim_array = [stim_array, inp]; % Append to stimulus array
+    end
+    if all( isfield(inp{:}, {'Class', 'Name', 'x', 'y'}) ) % If input is an roi...
+        roi_array = [roi_array, inp]; % Append to roi array
+    end
+end
 
 %% Create figure
 fig = figure(...
@@ -50,10 +59,18 @@ set(ax, ... % Format axis
     'YMinorGrid', 'on' ... % Horizontal lines
     );
 
-%% Draw stimulus
-for stim = varargin % For each stimulus...
-    stim = stim{:}; % Remove extraneous layer
-    stim.Obj = etstim(ax, stim.Dir, stim.Pos); % Draw stimulus
+%% Draw stimuli
+for stim = stim_array % For each stimulus...
+    stim{:}.Obj = etstim(ax, stim{:}); % Draw stimulus
+end
+
+%% Draw roi
+for roi = roi_array
+    roi{:}.Obj = plot(ax, polyshape(roi{:}.x, roi{:}.y), 'LineStyle', 'none'); % Draw region of interest
+    roi{:}.Lbl = text(ax, roi{:}.x(1), roi{:}.y(1), roi{:}.Name, ... % Label region of interest
+        'BackgroundColor', 'k', ...
+        'Color', 'w' ...
+        ); 
 end
 
 %% Plot eye movement
