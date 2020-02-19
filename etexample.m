@@ -4,8 +4,8 @@ close all
 [sock, screen] = etconnect(6555); % Connect to EyeTribe
 
 %% Pre-load stimuli
-stim = etstim(screen, 'example_image.png');
-txt = etstim(screen, 'example_text.txt', [NaN, 200]);
+stim = etstim(screen, 'example_image.png'); % Load an image stimulus
+txt = etstim(screen, 'example_text.txt', [NaN, 200]); % Load a text stimulus
 
 %% Define regions of interest
 stim.ROI = etroi('Image', stim); % Define ROI for image (supplied stim structure rather than coords)
