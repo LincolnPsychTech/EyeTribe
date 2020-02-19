@@ -1,5 +1,6 @@
 function [data] = etliveplot(sock, ax, lat)
 % Plot EyeTribe data as it is received.
+% NOTE: Unfinished code
 
 %% Format axis
 trace = line(ax, repmat(mean(ax.XLim), 1, lat), repmat(mean(ax.YLim), 1, lat), ...

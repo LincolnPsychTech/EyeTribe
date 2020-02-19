@@ -3,6 +3,9 @@ function val = etgetval(sock)
 % val = Parsed JSON object received from EyeTribe
 % sock = TCPIP socket connected to EyeTribe, created from @etconnect
 
+if strcmp(sock.Status, 'closed')
+    error('Socket is closed. Use @etconnect to open socket.');
+end
 try
     fprintf(sock,'{"category": "tracker", "request": "get", "values": ["frame"]}'); % Send request to socket
     raw = fscanf(sock); % Get data back from socket

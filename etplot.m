@@ -5,6 +5,10 @@ function fig = etplot(data, screen, varargin)
 % screen = Screen details structure, from @etconnect
 % varargin = Stimuli to plot, each input being a stim structure from @etstim
 
+
+% NTS: Add roi plotting functionality (varargin with stimuli)
+
+
 %% Transform data
 plotData = [data.avg]; % Get averaged data
 x = [plotData.x]; % Get x data
@@ -50,7 +54,7 @@ set(ax, ... % Format axis
 %% Draw stimulus
 for stim = varargin % For each stimulus...
     stim = stim{:}; % Remove extraneous layer
-    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4)) % Draw stimulus
+    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4)); % Draw stimulus
 end
 
 %% Plot eye movement

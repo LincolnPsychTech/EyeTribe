@@ -62,7 +62,6 @@ ax = axes(fig, ... % Create axis within figure
     end
 
     function closeFcn(app, ~)
-        assignin('base', 'data', app.UserData.Store);
         disp('Experiment terminated by user.');
         delete(app)
     end

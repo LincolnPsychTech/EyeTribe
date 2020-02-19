@@ -30,9 +30,20 @@ switch stimExt
         stim.Type = 'img';
         
         %% Read image
-        [img, ~, alpha] = imread(stimdir); % Read image
-        if isempty(alpha) % If no transparency data...
-            alpha = ones(size(img, [1,2])); % Set all pixels to fully opaque
+        if isstring(stimdir) || ischar(stimdir) % If stimdir is a string
+            [img, ~, alpha] = imread(stimdir); % Read image
+            if isempty(alpha) % If no transparency data...
+                alpha = ones(size(img, [1,2])); % Set all pixels to fully opaque
+            end
+        elseif all( isfield(stimdir, {'img' 'alpha'}) ) % If stimdir is a structure with "img" AND "alpha" fields
+            img = stimdir.img; % Read image
+            alpha = stimdir.alpha; % Read alpha
+        elseif isfield(stimdir, 'img') % If stimdir is a structure with just an "img" field
+            img = stimdir.img; % Read image
+            alpha = ones( size(stimdir.img, [1 2]) ); % Set all pixels to fully opaque
+        elseif isnumeric(stimdir) && size(stimdir, 3) == 3 % If stimdir is a numeric array of RGB triplets
+            img = stimdir; % Read image
+            alpha = ones( size(stimdir, [1 2]) ); % Set all pixels to fully opaque 
         end
         
         %% Defaults for non-values
@@ -56,6 +67,7 @@ switch stimExt
             'CData', flipud(img), ... % Flip upside down as y axes are backwards
             'AlphaData', flipud(alpha) ... % Apply transparency
             );
+        
     case txtExts
         %% Read text
         txt = fileread(stimdir);
@@ -75,7 +87,7 @@ switch stimExt
         end
         
         %% Draw text
-        stim.Obj = annotation('textbox', ... % Create a textbox...
+        stim.Obj = annotation(ax.Parent, 'textbox', ... % Create a textbox...
             'EdgeColor', 'none', ... % ...with no edge...
             'FontSize', 20, ... % ...font size 20...
             'Position', [stim.Pos(1) stim.Pos(2) stim.Pos(3) stim.Pos(4)], ... % ...at a user-specified position...
