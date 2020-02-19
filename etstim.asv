@@ -21,7 +21,7 @@ if ishandle(ax) % If ax is a handle...
 elseif all( isfield(ax, {'Width', 'Height'}) ) % If ax is merely screen spec...
     ax.XLim = [1, ax.Width]; % Create placeholder XLim field with width
     ax.YLim = [1, ax.Height]; % Create placeholder YLim field with height
-else % If ax is neither
+else % If ax
     error("ax must be either an axis handle or screen spec structure generated via @etconnect");
 end
 
@@ -91,7 +91,7 @@ else
 end
 
 if ishandle(ax)
-    switch stim.Type
+    switch img.Type
         case 'img'
             %% Draw image
             stim.Obj = image(ax, ...

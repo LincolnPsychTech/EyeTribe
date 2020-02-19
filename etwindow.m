@@ -1,4 +1,4 @@
-function [ax, fig] = etwindow(sDim, col)
+function [ax, fig] = etwindow(screen, col)
 % Function to create a fullscreen window for plotting stimuli to.
 % ax = Axis to plot to
 % fig = Figure object containing window
@@ -7,14 +7,17 @@ function [ax, fig] = etwindow(sDim, col)
 % background colour will default to [0.5, 0.5, 0.5] if none is specified
 
 if ~exist('sDim', 'var') % If user did not specify screen dim...
-    sDim = get(groot, 'ScreenSize'); % Get screen dimensions
+    screen = get(groot, 'ScreenSize'); % Get screen dimensions
 end
 if ~exist('col', 'var') % If user did not specify colour...
     col = [0.5 0.5 0.5]; % Default to 0.5 grey
 end
+if all( isfield(screen, {'Width', 'Height'}) )
+    screen = [1 1 screen.Width screen.Height];
+end
 
 fig = figure(... % Create full screen figure
-    'InnerPosition', sDim, ... % Fullscreen figure
+    'InnerPosition', screen, ... % Fullscreen figure
     'KeyPressFcn', @keyFcn, ... % Create keypress listener
     'WindowButtonDownFcn', @clickFcn, ... % Create click listener 
     'SizeChangedFcn', @sizeFcn, ... % Function to match axis limits of fullscreen axes to figure size
@@ -28,8 +31,8 @@ fig = figure(... % Create full screen figure
 
 ax = axes(fig, ... % Create axis within figure
     'Position', [0 0 1 1], ... % Occupy entire figure
-    'XLim', sDim([1,3]), ... % X limits are width of screen in pixels
-    'YLim', sDim([1,3]), ... % Y limits are height of screen in pixels
+    'XLim', screen([1,3]), ... % X limits are width of screen in pixels
+    'YLim', screen([2,4]), ... % Y limits are height of screen in pixels
     'Color', col, ... % Colour defined by user
     'TickLength', [0 0], ... % Remove ticks
     'Box', 'off' ... % Remove box

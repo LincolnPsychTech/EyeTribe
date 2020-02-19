@@ -1,4 +1,26 @@
-function roi = etroi(name, x, y)
+function roi = etroi(name, varargin)
+
+switch length(varargin)
+    case 1
+        stim = varargin{1};
+        if all( isfield(varargin{1}, {'Type', 'Pos', 'Dir', 'Obj'}) ) % If user has supplied an @etstim structure...
+            if length(stim.Pos) == 4
+                x = stim.Pos(1) + [0 0 stim.Pos(3) stim.Pos(3)];
+                y = stim.Pos(2) + [0 stim.Pos(4) stim.Pos(4) 0];
+            else
+                error("When supplying a stimulus structure in place of coordinates, stimulus must have 4 position values.");
+            end
+        else
+            error("When supplying a stimulus in place of coordinates, that stimulus must be a stimulus structure generated using @etstim");
+        end
+    case 2
+        x = varargin{1};
+        y = varargin{2};
+    otherwise
+        error("Incorrect number of inputs.")
+end
+
+
 if isnumeric(x) % If x is numeric...
     if isnumeric(y) % ...and y is also numeric...
         if length(y) ~= length(x) % ...but x and y are different lengths...

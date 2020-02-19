@@ -1,5 +1,5 @@
-function etdrawroi(screen, varargin)
-% NTS: Add save button, fix text drawing
+function roi = etdrawroi(screen, varargin)
+% GUI to define regions of interest
 
 
 %% Create figure
@@ -37,16 +37,36 @@ ax = axes(fig, ... % Create axis
 
 %% Draw stimulus
 for stim = varargin % For each stimulus...
-    stim = stim{:}; % Remove extraneous layer
-    etstim(ax, stim.Dir, stim.Pos(1), stim.Pos(2), stim.Pos(3), stim.Pos(4)); % Draw stimulus
+    etstim(ax, stim{:}); % Draw stimulus
 end
 
-%% Draw beginnings of roi
+%% Create roi storage structure
 fig.UserData.roi = [];
 fig.UserData.obj = [];
 fig.UserData.screen = screen;
 
+%% Add save button
+sv = uibutton(fig, 'Position', [fig.Position(3) - 200, 50, 100, 25], 'Text', 'Save ROI', 'ButtonPushedFcn', fig.CloseRequestFcn);
+nm = uitextarea(fig, 'Position', [fig.Position(3) - 500, 50, 300, 25], 'Value', {''});
+uilabel(fig, 'Position', [fig.Position(3) - 600, 50, 100, 25], 'Text', 'Name ROI:');
+
+
+while ishghandle(fig)
+    if isempty(nm.Value{:}) || size(fig.UserData.roi, 1) < 3
+        sv.Enable = 'off';
+    else
+        sv.Enable = 'on';
+        data = fig.UserData.roi;
+        name = nm.Value{:};
+    end
+    drawnow
+end
+
+roi = etroi(name, data(:,1), data(:,2));
+
+
 function getcoords(app, event)
+    disp(event)
     ax = findobj(app, 'Type', 'axes');
     axpos = ax.Position .* app.Position([3 4 3 4]); % Axis position relative to the figure
     relpos = ( app.CurrentPoint - axpos([1 2]) ) ./ axpos([3 4]); % How far into the axis was the click?
@@ -66,4 +86,5 @@ function getcoords(app, event)
             )
     end 
 end
+        
 end
