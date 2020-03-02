@@ -45,6 +45,8 @@ elseif isstring(ogstim) || ischar(ogstim)
             stim.Type = 'img';
         case txtExts
             stim.Type = 'txt';
+        otherwise
+            stim.Type = 'str';
     end
     
     %% Read stimulus
@@ -56,6 +58,9 @@ elseif isstring(ogstim) || ischar(ogstim)
             end
         case 'txt'
             stim.Text = fileread(ogstim); % Read text from file
+        case 'str'
+            stim.Text = ogstim;
+            stim.Dir = [];
     end
     
     %% Position stim
@@ -67,7 +72,7 @@ elseif isstring(ogstim) || ischar(ogstim)
                 size(stim.Img, 2), ... % Default to full size
                 size(stim.Img, 1), ... % Default to full size
                 ];
-        case 'txt'
+        case {'txt' 'str'}
             defPos = [...
                 mean(ax.XLim), ... % Default to center
                 mean(ax.YLim), ... % Default to center
@@ -78,6 +83,13 @@ elseif isstring(ogstim) || ischar(ogstim)
         if isnumeric(pos) % If position is numeric array of 4 values...
             stim.Pos( ~isnan(pos) ) = pos( ~isnan(pos) ); % Use non-NaN values
             stim.Pos( isnan(pos) ) = defPos( isnan(pos) ); % Use default values where supplied values were NaN
+            switch stim.Type
+                case 'img'
+                    invPos = [max(ax.XLim) - stim.Pos(3), max(ax.YLim) - stim.Pos(4), stim.Pos(3), stim.Pos(4)]; % Positions for inverse values (e.g. x = -200 means 200px from right edge)
+                case {'txt' 'str'}
+                    invPos = [max(ax.XLim), max(ax.YLim)]; % Positions for inverse values (e.g. x = -200 means 200px from right edge)
+            end
+            stim.Pos( pos < 0 ) = invPos( pos < 0 ) + stim.Pos( pos < 0 ); % Calculate inverse values when supplied values were negative
         else
             error("Position must be a numeric array of 4 values.");
         end
@@ -101,7 +113,7 @@ if ishandle(ax)
                 'AlphaData', flipud(stim.Alpha) ... % Apply transparency
                 );
             
-        case 'txt'
+        case {'txt' 'str'}
             stim.Obj = text(ax, ... % Create text...
                 'EdgeColor', 'none', ... % ...with no edge...
                 'FontSize', 20, ... % ...font size 20...

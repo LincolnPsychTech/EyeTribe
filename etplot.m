@@ -67,7 +67,7 @@ end
 %% Draw roi
 for roi = roi_array
     roi{:}.Obj = plot(ax, polyshape(roi{:}.x, roi{:}.y), 'LineStyle', 'none'); % Draw region of interest
-    roi{:}.Lbl = text(ax, roi{:}.x(1), roi{:}.y(1), roi{:}.Name, ... % Label region of interest
+    roi{:}.Lbl = text(ax, mean(roi{:}.x), mean(roi{:}.y), roi{:}.Name, ... % Label region of interest
         'BackgroundColor', 'k', ...
         'Color', 'w' ...
         ); 
