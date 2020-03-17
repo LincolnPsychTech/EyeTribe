@@ -1,9 +1,9 @@
+pip install -r requirements.txt
 import socket
 import json
 import numpy
 from datetime import datetime
 from win32api import GetSystemMetrics
-from matplotlib import path
 from shapely.geometry import Point, Polygon
 
 
