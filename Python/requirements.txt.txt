@@ -1,0 +1,6 @@
+socket
+json
+numpy
+datetime
+win32api
+shapely.geometry

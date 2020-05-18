@@ -1,4 +1,3 @@
-pip install -r requirements.txt
 import socket
 import json
 import numpy
